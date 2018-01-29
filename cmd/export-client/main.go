@@ -47,11 +47,16 @@ type config struct {
 	MongoSocketTimeout  int
 }
 
+// Set from the makefile
+var version string = "undefined"
+
 func main() {
 	cfg, clientCfg := loadConfig()
 
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+
+	logger.Info("Starting export-client", zap.String("version", version))
 
 	client.InitLogger(logger)
 

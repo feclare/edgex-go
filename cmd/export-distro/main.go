@@ -25,6 +25,9 @@ const (
 	envDataHost   string = "EXPORT_DISTRO_DATA_HOST"
 )
 
+// Set from the makefile
+var version string = "undefined"
+
 var logger *zap.Logger
 
 func main() {
@@ -33,7 +36,7 @@ func main() {
 
 	distro.InitLogger(logger)
 
-	logger.Info("Starting distro")
+	logger.Info("Starting export-distro", zap.String("version", version))
 	cfg := loadConfig()
 
 	errs := make(chan error, 2)

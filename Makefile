@@ -2,11 +2,12 @@
 
 EXPORT_CLIENT_VERSION=$(shell cat cmd/export-client/VERSION)
 EXPORT_DISTRO_VERSION=$(shell cat cmd/export-distro/VERSION)
+CORE_DATA_VERSION=$(shell cat cmd/core-data/VERSION)
 
 build:
 	go build -ldflags "-X main.version=$(EXPORT_CLIENT_VERSION)" ./cmd/export-client
 	go build -ldflags "-X main.version=$(EXPORT_DISTRO_VERSION)" ./cmd/export-distro
-	go build ./cmd/core-data
+	go build -ldflags "-X main.version=$(CORE_DATA_VERSION)" ./cmd/core-data
 	go build ./core/metadata
 	go build ./core/command
 

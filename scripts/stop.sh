@@ -5,7 +5,6 @@ function killit {
 	killall -9 $1
 }
 
-killit mongod
 killit metadata
 killit core-command
 killit core-data

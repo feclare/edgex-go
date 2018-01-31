@@ -43,9 +43,6 @@ docker: docker_export_distro docker_export_client
 install: 
 	rm -rf $(DESTDIR)
 	mkdir -p $(DESTDIR)/config
-	mkdir -p $(DESTDIR)/mongodb
-	mkdir -p $(DESTDIR)/mongodb/lib
-	mkdir -p $(DESTDIR)/mongodb/log
 	
 	$(foreach m,$(MICROSERVICES), \
 		mkdir -p $(DESTDIR)/`dirname $(m)`; \
@@ -62,7 +59,6 @@ install:
 	cp -r core/metadata/res/* $(DESTDIR)/core/metadata/res/
 	#End of hack
 
-	cp -rf config/* $(DESTDIR)/config
 	cp scripts/* $(DESTDIR)
 
 

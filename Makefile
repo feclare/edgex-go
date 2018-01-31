@@ -3,13 +3,26 @@
 EXPORT_CLIENT_VERSION=$(shell cat cmd/export-client/VERSION)
 EXPORT_DISTRO_VERSION=$(shell cat cmd/export-distro/VERSION)
 CORE_DATA_VERSION=$(shell cat cmd/core-data/VERSION)
+CORE_COMMAND_VERSION=$(shell cat cmd/core-command/VERSION)
 
-build:
-	go build -ldflags "-X main.version=$(EXPORT_CLIENT_VERSION)" ./cmd/export-client
-	go build -ldflags "-X main.version=$(EXPORT_DISTRO_VERSION)" ./cmd/export-distro
-	go build -ldflags "-X main.version=$(CORE_DATA_VERSION)" ./cmd/core-data
-	go build ./core/metadata
-	go build ./core/command
+MICROSERVICES=cmd/core-data/core-data cmd/core-command/core-command cmd/export-client/export-client cmd/export-distro/export-distro
+.PHONY: $(MICROSERVICES)
+
+
+build: $(MICROSERVICES)
+	echo go build ./core/metadata
+
+cmd/core-data/core-data:
+	go build -ldflags "-X main.version=$(CORE_DATA_VERSION)" -o cmd/core-data/core-data ./cmd/core-data 
+
+cmd/core-command/core-command:
+	go build -ldflags "-X main.version=$(CORE_COMMAND_VERSION)" -o cmd/core-command/core-command ./cmd/core-command 
+
+cmd/export-client/export-client:
+	go build -ldflags "-X main.version=$(EXPORT_CLIENT_VERSION)" -o cmd/export-client/export-client ./cmd/export-client
+
+cmd/export-distro/export-distro:
+	go build -ldflags "-X main.version=$(EXPORT_DISTRO_VERSION)" -o cmd/export-distro/export-distro ./cmd/export-distro
 
 test:
 	go test `glide novendor`

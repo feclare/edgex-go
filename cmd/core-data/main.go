@@ -33,6 +33,9 @@ const (
 	configFile string = "./res/configuration.json"
 )
 
+// Set from the makefile
+var version string = "undefined"
+
 var loggingClient logger.LoggingClient
 
 // Read the configuration file and update configuration struct
@@ -68,6 +71,8 @@ func main() {
 	// Create Logger (Default Parameters)
 	loggingClient = logger.NewClient(configuration.Servicename, configuration.Loggingremoteurl)
 	loggingClient.LogFilePath = configuration.Loggingfile
+
+	loggingClient.Info("Starting core-data " + version)
 
 	data.Init(*configuration, loggingClient)
 

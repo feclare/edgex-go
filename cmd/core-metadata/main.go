@@ -11,8 +11,8 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *
- * @microservice: core-command-go service
- * @author: Spencer Bull, Dell
+ * @microservice: core-metadata-go service
+ * @author: Spencer Bull & Ryan Comer, Dell
  * @version: 0.5.0
  *******************************************************************************/
 package main
@@ -22,39 +22,46 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/edgexfoundry/edgex-go/core/command"
+	"github.com/edgexfoundry/edgex-go/core/metadata"
 	logger "github.com/edgexfoundry/edgex-go/support/logging-client"
 )
 
 const (
-	configFile string = "res/configuration.json"
+	CONFIG = "res/configuration.json"
 )
 
-var configuration command.ConfigurationStruct
-
 func main() {
-	var loggingClient = logger.NewClient(command.SERVICENAME, "")
+	var loggingClient = logger.NewClient(metadata.METADATASERVICENAME, "")
+
 	// Load configuration data
-	err := readConfigurationFile(configFile)
+	configuration, err := readConfigurationFile(CONFIG)
 	if err != nil {
-		loggingClient.Error("Could not read config file(" + configFile + "): " + err.Error())
+		loggingClient.Error("Could not read configuration file(" + CONFIG + "): " + err.Error())
 		os.Exit(1)
 	}
 
-	// Setup Logging
+	// Update logging based on configuration
 	loggingClient.RemoteUrl = configuration.LoggingRemoteURL
-	loggingClient.LogFilePath = configuration.LogFile
+	loggingClient.LogFilePath = configuration.LoggingFile
 
-	command.Start(configuration, loggingClient)
+	metadata.Start(*configuration, loggingClient)
 }
 
-func readConfigurationFile(path string) error {
+// Read the configuration file and
+func readConfigurationFile(path string) (*metadata.ConfigurationStruct, error) {
+	var configuration metadata.ConfigurationStruct
+
 	// Read the configuration file
 	contents, err := ioutil.ReadFile(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Decode the configuration as JSON
-	return json.Unmarshal(contents, &configuration)
+	err = json.Unmarshal(contents, &configuration)
+	if err != nil {
+		return nil, err
+	}
+
+	return &configuration, nil
 }

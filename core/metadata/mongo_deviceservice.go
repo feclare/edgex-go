@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Dell Inc.
+ * Copyright 2018 Dell Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * @author: Spencer Bull & Ryan Comer, Dell
  * @version: 0.5.0
  *******************************************************************************/
-package main
+package metadata
 
 import (
 	"github.com/edgexfoundry/edgex-go/core/domain/models"

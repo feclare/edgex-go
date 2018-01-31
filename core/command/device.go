@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Dell Inc.
+ * Copyright 2018 Dell Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,12 +15,13 @@
  * @author: Spencer Bull, Dell
  * @version: 0.5.0
  *******************************************************************************/
-package main
+package command
 
 import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/edgexfoundry/edgex-go/core/clients/metadataclients"
@@ -159,4 +160,8 @@ func getCommandsByDeviceName(dn string) (int, models.CommandResponse, error) {
 		return http.StatusServiceUnavailable, models.CommandResponse{}, err
 	}
 	return http.StatusOK, models.CommandResponseFromDevice(d, constructCommandURL()), err
+}
+
+func constructCommandURL() string {
+	return configuration.URLProtocol + configuration.ServiceAddress + ":" + strconv.Itoa(configuration.ServerPort)
 }

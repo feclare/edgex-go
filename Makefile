@@ -3,6 +3,7 @@
 EXPORT_CLIENT_VERSION=$(shell cat cmd/export-client/VERSION)
 EXPORT_DISTRO_VERSION=$(shell cat cmd/export-distro/VERSION)
 CORE_DATA_VERSION=$(shell cat cmd/core-data/VERSION)
+CORE_METADATA_VERSION=$(shell cat cmd/core-metadata/VERSION)
 CORE_COMMAND_VERSION=$(shell cat cmd/core-command/VERSION)
 
 MICROSERVICES=cmd/core-data/core-data cmd/core-metadata/core-metadata \

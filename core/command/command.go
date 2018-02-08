@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	consulclient "github.com/edgexfoundry/consul-client-go"
+	consulclient "github.com/edgexfoundry/edgex-go/support/consul-client"
 	logger "github.com/edgexfoundry/edgex-go/support/logging-client"
 )
 

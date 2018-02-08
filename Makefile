@@ -1,4 +1,4 @@
-.PHONY: build test prepare docker docker_export_client docker_export_distro
+.PHONY: build test prepare docker docker_export_client docker_export_distro docker_core_metadata docker_core_command
 
 GO=CGO_ENABLED=0 go
 GOCGO=CGO_ENABLED=1 go
@@ -44,4 +44,11 @@ docker_export_client:
 docker_export_distro:
 	docker build -f docker/Dockerfile.distro -t edgexfoundry/docker-export-distro .
 
-docker: docker_export_distro docker_export_client
+docker_core_metadata:
+	docker build -f docker/Dockerfile.metadata -t edgexfoundry/docker-core-metadata .
+
+docker_core_command:
+	docker build -f docker/Dockerfile.command -t edgexfoundry/docker-core-command .
+
+docker: docker_export_distro docker_export_client docker_core_metadata docker_core_command
+

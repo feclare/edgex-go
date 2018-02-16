@@ -60,7 +60,7 @@ func (fl *fileLog) remove(criteria matchCriteria) int {
 		tmpFile.Close()
 		return 0
 	}
-    defer f.Close()
+	defer f.Close()
 	count := 0
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -84,8 +84,8 @@ func (fl *fileLog) remove(criteria matchCriteria) int {
 		//fmt.Printf("Error renaming %s to %s: %v", tmpFilename, fl.filename, err)
 		return 0
 	}
-    
-    // Close old file to open the new one when writting next log
+
+	// Close old file to open the new one when writting next log
 	fl.out.Close()
 	fl.out = nil
 	return count
@@ -111,4 +111,12 @@ func (fl *fileLog) find(criteria matchCriteria) []support_domain.LogEntry {
 		}
 	}
 	return logs
+}
+
+func (fl *fileLog) reset() {
+	if fl.out != nil {
+		fl.out.Close()
+		fl.out = nil
+	}
+	os.Remove(fl.filename)
 }

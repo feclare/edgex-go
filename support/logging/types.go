@@ -32,6 +32,10 @@ type persistence interface {
 	add(logEntry support_domain.LogEntry)
 	remove(criteria matchCriteria) int
 	find(criteria matchCriteria) []support_domain.LogEntry
+
+	// Needed for the tests. Reset the instance (closing files, sessions...)
+	// and clear the logs.
+	reset()
 }
 
 func GetDefaultConfig() Config {

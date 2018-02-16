@@ -36,6 +36,9 @@ func (dp *dummyPersist) find(criteria matchCriteria) []support_domain.LogEntry {
 	return nil
 }
 
+func (dp dummyPersist) reset() {
+}
+
 func TestPing(t *testing.T) {
 	// create test server with handler
 	ts := httptest.NewServer(httpServer())

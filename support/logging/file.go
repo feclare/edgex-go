@@ -7,6 +7,7 @@
 package logging
 
 import (
+	"bufio"
 	"encoding/json"
 	"io"
 	"os"
@@ -39,10 +40,28 @@ func (fl *fileLog) add(le support_domain.LogEntry) {
 	//fmt.Println("file: ", le)
 }
 
-func (*fileLog) remove(criteria matchCriteria) int {
+func (fl *fileLog) remove(criteria matchCriteria) int {
 	return 0
 }
 
-func (*fileLog) find(criteria matchCriteria) []support_domain.LogEntry {
-	return nil
+func (fl *fileLog) find(criteria matchCriteria) []support_domain.LogEntry {
+	var logs []support_domain.LogEntry
+	f, err := os.Open(fl.filename)
+	if err != nil {
+		//fmt.Println("Error opening log file: ", fl.filename, err)
+		return nil
+	}
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		var le support_domain.LogEntry
+
+		line := scanner.Bytes()
+		err := json.Unmarshal(line, &le)
+		if err == nil {
+			if criteria.match(le) {
+				logs = append(logs, le)
+			}
+		}
+	}
+	return logs
 }

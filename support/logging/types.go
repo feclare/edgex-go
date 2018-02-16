@@ -34,26 +34,10 @@ type persistence interface {
 	find(criteria matchCriteria) []support_domain.LogEntry
 }
 
-type matchCriteria struct {
-	OriginServices  []string
-	MessageKeywords []string
-	LogLevels       []string
-	Labels          []string
-	Keywords        []string
-	Start           int64
-	End             int64
-	Limit           int
-}
-
 func GetDefaultConfig() Config {
 	return Config{
 		Port:        defaultPort,
 		Persistence: defaultPersistence,
 		LogFilename: defaultLogFilename,
 	}
-}
-
-func (matchCriteria) match(le support_domain.LogEntry) bool {
-
-	return true
 }

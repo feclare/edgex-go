@@ -86,3 +86,72 @@ func TestFileFind(t *testing.T) {
 		})
 	}
 }
+
+func TestFileRemove(t *testing.T) {
+	var keywords1 = []string{"1"}
+	var keywords2 = []string{"2"}
+	var keywords12 = []string{"2", "1"}
+
+	var labels1 = []string{"label1"}
+	var labels2 = []string{"label2"}
+	var labels12 = []string{"label2", "label1"}
+
+	var tests = []struct {
+		name     string
+		criteria matchCriteria
+		result   int
+	}{
+		{"empty", matchCriteria{}, 6},
+		{"keywords1", matchCriteria{Keywords: keywords1}, 3},
+		{"keywords2", matchCriteria{Keywords: keywords2}, 3},
+		{"keywords12", matchCriteria{Keywords: keywords12}, 6},
+		{"labels1", matchCriteria{Labels: labels1}, 5},
+		{"labels2", matchCriteria{Labels: labels2}, 1},
+		{"labels12", matchCriteria{Labels: labels12}, 6},
+	}
+
+	// Remove test log when test ends
+	defer os.Remove(testFilename)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			os.Remove(testFilename)
+			fl := fileLog{filename: testFilename}
+
+			le := support_domain.LogEntry{
+				Level:         support_domain.TRACE,
+				OriginService: sampleService1,
+				Message:       message1,
+				Labels:        labels1,
+			}
+			fl.add(le)
+			le.Message = message2
+			fl.add(le)
+			le.Message = message1
+			fl.add(le)
+			le.Message = message2
+			le.OriginService = sampleService2
+			le.Message = message2
+			fl.add(le)
+			le.Message = message1
+			fl.add(le)
+			le.Message = message2
+			le.Labels = labels2
+			fl.add(le)
+
+			removed := fl.remove(tt.criteria)
+			if removed != tt.result {
+				t.Errorf("Should return %d log entries, returned %d",
+					tt.result, removed)
+			}
+			// we add a new log
+			fl.add(le)
+            // test there are the remaining logs and the new one
+			logs := fl.find(matchCriteria{})
+			if len(logs) != 6-tt.result+1 {
+				t.Errorf("Should return %d log entries, returned %d",
+					6-tt.result+1, len(logs))
+			}
+		})
+	}
+}

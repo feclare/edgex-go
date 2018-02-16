@@ -8,10 +8,11 @@ EXPORT_DISTRO_VERSION=$(shell cat cmd/export-distro/VERSION)
 CORE_DATA_VERSION=$(shell cat cmd/core-data/VERSION)
 CORE_METADATA_VERSION=$(shell cat cmd/core-metadata/VERSION)
 CORE_COMMAND_VERSION=$(shell cat cmd/core-command/VERSION)
+SUPPORT_LOGGING_VERSION=$(shell cat cmd/support-logging/VERSION)
 
 MICROSERVICES=cmd/core-data/core-data cmd/core-metadata/core-metadata \
 	cmd/core-command/core-command cmd/export-client/export-client \
-	cmd/export-distro/export-distro
+	cmd/export-distro/export-distro cmd/support-logging/support-logging
 .PHONY: $(MICROSERVICES)
 
 
@@ -31,6 +32,9 @@ cmd/export-client/export-client:
 
 cmd/export-distro/export-distro:
 	$(GOCGO) build -ldflags "-X main.version=$(EXPORT_DISTRO_VERSION)" -o cmd/export-distro/export-distro ./cmd/export-distro
+
+cmd/support-logging/support-logging:
+	$(GO) build -ldflags "-X main.version=$(SUPPORT_LOGGING_VERSION)" -o cmd/support-logging/support-logging ./cmd/support-logging
 
 test:
 	go test `glide novendor`

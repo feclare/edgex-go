@@ -1,4 +1,7 @@
-.PHONY: build test prepare docker docker_export_client docker_export_distro docker_core_metadata docker_core_command
+.PHONY: build test prepare docker
+
+DOCKERS=docker_export_client docker_export_distro docker_core_metadata docker_core_command docker_core_data
+.PHONY: $(DOCKERS)
 
 GO=CGO_ENABLED=0 go
 GOCGO=CGO_ENABLED=1 go
@@ -54,5 +57,8 @@ docker_core_metadata:
 docker_core_command:
 	docker build -f docker/Dockerfile.command -t edgexfoundry/docker-core-command .
 
-docker: docker_export_distro docker_export_client docker_core_metadata docker_core_command
+docker_core_data:
+	docker build -f docker/Dockerfile.data -t edgexfoundry/docker-core-command .
+
+docker: $(DOCKERS)
 

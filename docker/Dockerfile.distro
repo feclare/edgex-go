@@ -10,6 +10,6 @@ RUN apk update && apk add make
 COPY . .
 RUN make cmd/export-distro/export-distro
 
-FROM scratch
+FROM alpine:3.7
 COPY --from=builder /go/src/github.com/edgexfoundry/edgex-go/cmd/export-distro/export-distro /
 ENTRYPOINT ["/export-distro"]

@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
+	consulclient "github.com/edgexfoundry/consul-client-go"
 	"github.com/edgexfoundry/edgex-go/core/clients/metadataclients"
 	"github.com/edgexfoundry/edgex-go/core/data/clients"
 	"github.com/edgexfoundry/edgex-go/core/data/messaging"
-	consulclient "github.com/edgexfoundry/edgex-go/support/consul-client"
 	"github.com/edgexfoundry/edgex-go/support/logging-client"
 )
 

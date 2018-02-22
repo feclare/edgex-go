@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2018 Cavium
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 .PHONY: build test prepare docker
 
 DOCKERS=docker_export_client docker_export_distro docker_core_metadata docker_core_command docker_core_data

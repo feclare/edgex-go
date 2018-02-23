@@ -21,11 +21,21 @@ import (
 	"go.uber.org/zap"
 )
 
-var registrationChanges chan export.NotifyUpdate = make(chan export.NotifyUpdate, 2)
+const (
+	notifyUpdateSize int = 10
+)
 
-func RefreshRegistrations(update export.NotifyUpdate) {
-	// TODO make it not blocking, return bool?
-	registrationChanges <- update
+var registrationChanges chan export.NotifyUpdate = make(chan export.NotifyUpdate,
+	notifyUpdateSize)
+
+func RefreshRegistrations(update export.NotifyUpdate) bool {
+	select {
+	case registrationChanges <- update:
+	default:
+		logger.Warn("Couldn't process registration update notification")
+		return false
+	}
+	return true
 }
 
 func newRegistrationInfo() *registrationInfo {

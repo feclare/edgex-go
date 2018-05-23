@@ -15,17 +15,17 @@ package clients
 
 import (
 	"errors"
+
 	"github.com/edgexfoundry/edgex-go/core/domain/models"
 	"github.com/edgexfoundry/edgex-go/support/logging-client"
 	"gopkg.in/mgo.v2/bson"
 )
 
-type DatabaseType int8 // Database type enum
 const (
-	MONGO DatabaseType = iota
-	MOCK
-	INFLUX
-	MEMORY
+	MongoType  = "mongodb"
+	MockType   = "mock"
+	InfluxType = "influx"
+	MemoryType = "memorydb"
 )
 
 type DBClient interface {
@@ -190,7 +190,7 @@ type DBClient interface {
 }
 
 type DBConfiguration struct {
-	DbType       DatabaseType
+	DbType       string
 	Host         string
 	Port         int
 	Timeout      int
@@ -209,7 +209,7 @@ var loggingClient = logger.NewClient(DataClient, false, "")
 // Return the dbClient interface
 func NewDBClient(config DBConfiguration) (DBClient, error) {
 	switch config.DbType {
-	case MONGO:
+	case MongoType:
 		// Create the mongo client
 		mc, err := newMongoClient(config)
 		if err != nil {
@@ -217,7 +217,7 @@ func NewDBClient(config DBConfiguration) (DBClient, error) {
 			return nil, err
 		}
 		return mc, nil
-	case INFLUX:
+	case InfluxType:
 		// Create the influx client
 		ic, err := newInfluxClient(config)
 		if err != nil {
@@ -225,11 +225,11 @@ func NewDBClient(config DBConfiguration) (DBClient, error) {
 			return nil, err
 		}
 		return ic, nil
-	case MOCK:
+	case MockType:
 		//Create the mock client
 		mock := &MockDb{}
 		return mock, nil
-	case MEMORY:
+	case MemoryType:
 		//Create the memory client
 		mem := &memDB{}
 		return mem, nil

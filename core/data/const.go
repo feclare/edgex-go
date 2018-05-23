@@ -30,6 +30,7 @@ type ConfigurationStruct struct {
 	ServiceAddress             string
 	DeviceUpdateLastConnected  bool
 	ServiceUpdateLastConnected bool
+	DBType                     string
 	MongoDBUserName            string
 	MongoDBPassword            string
 	MongoDatabaseName          string
@@ -70,4 +71,3 @@ type ConfigurationStruct struct {
 }
 
 var configuration ConfigurationStruct = ConfigurationStruct{} //  Needs to be initialized before used
-

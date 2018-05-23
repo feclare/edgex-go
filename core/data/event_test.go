@@ -33,7 +33,7 @@ var testRoutes *mux.Router
 
 func TestMain(m *testing.M) {
 	globalMockParams = clients.NewMockParams()
-	dbc, _ = clients.NewDBClient(clients.DBConfiguration{DbType: clients.MOCK})
+	dbc, _ = clients.NewDBClient(clients.DBConfiguration{DbType: clients.MockType})
 	testRoutes = LoadRestRoutes()
 	loggingClient = logger.NewMockClient()
 	os.Exit(m.Run())

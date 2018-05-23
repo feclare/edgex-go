@@ -14,6 +14,7 @@ ServiceTimeout = 5000
 ServiceAddress = 'localhost'
 DeviceUpdateLastConnected = false
 ServiceUpdateLastConnected = false
+DBType = 'mongodb'
 MongoDBUserName = 'core'
 MongoDBPassword = 'password'
 MongoDatabaseName = 'coredata'

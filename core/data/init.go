@@ -66,7 +66,7 @@ func Init(conf ConfigurationStruct, l logger.LoggingClient, useConsul bool) erro
 
 	// Create a database client
 	dbc, err = clients.NewDBClient(clients.DBConfiguration{
-		DbType:       clients.MONGO,
+		DbType:       conf.DBType,
 		Host:         conf.MongoDBHost,
 		Port:         conf.MongoDBPort,
 		Timeout:      conf.MongoDBConnectTimeout,
@@ -75,15 +75,15 @@ func Init(conf ConfigurationStruct, l logger.LoggingClient, useConsul bool) erro
 		Password:     conf.MongoDBPassword,
 	})
 	if err != nil {
-		return fmt.Errorf("couldn't connect to database: %v", err.Error())
+		return fmt.Errorf("couldn't connect to database '%s': %v", conf.DBType, err.Error())
 	}
 
 	// Create metadata clients
 	params := types.EndpointParams{
-						ServiceKey:internal.CoreMetaDataServiceKey,
-						Path:conf.MetaDevicePath,
-						UseRegistry:useConsul,
-						Url:conf.MetaDeviceURL}
+		ServiceKey:  internal.CoreMetaDataServiceKey,
+		Path:        conf.MetaDevicePath,
+		UseRegistry: useConsul,
+		Url:         conf.MetaDeviceURL}
 
 	mdc, err = metadata.NewDeviceClient(params, types.Endpoint{})
 	if err != nil {

@@ -4,18 +4,19 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-package clients
+package test
 
 import (
 	"fmt"
 	"testing"
 	"time"
 
+	"github.com/edgexfoundry/edgex-go/core/data/clients"
 	"github.com/edgexfoundry/edgex-go/core/domain/models"
 	"gopkg.in/mgo.v2/bson"
 )
 
-func populateDbReadings(db DBClient, count int) (bson.ObjectId, error) {
+func populateDbReadings(db clients.DBClient, count int) (bson.ObjectId, error) {
 	var id bson.ObjectId
 	for i := 0; i < count; i++ {
 		name := fmt.Sprintf("name%d", i)
@@ -32,7 +33,7 @@ func populateDbReadings(db DBClient, count int) (bson.ObjectId, error) {
 	return id, nil
 }
 
-func populateDbValues(db DBClient, count int) (bson.ObjectId, error) {
+func populateDbValues(db clients.DBClient, count int) (bson.ObjectId, error) {
 	var id bson.ObjectId
 	for i := 0; i < count; i++ {
 		name := fmt.Sprintf("name%d", i)
@@ -51,7 +52,7 @@ func populateDbValues(db DBClient, count int) (bson.ObjectId, error) {
 	return id, nil
 }
 
-func populateDbEvents(db DBClient, count int, pushed int64) (bson.ObjectId, error) {
+func populateDbEvents(db clients.DBClient, count int, pushed int64) (bson.ObjectId, error) {
 	var id bson.ObjectId
 	for i := 0; i < count; i++ {
 		name := fmt.Sprintf("name%d", i)
@@ -69,7 +70,7 @@ func populateDbEvents(db DBClient, count int, pushed int64) (bson.ObjectId, erro
 	return id, nil
 }
 
-func testDBReadings(t *testing.T, db DBClient) {
+func testDBReadings(t *testing.T, db clients.DBClient) {
 	err := db.ScrubAllEvents()
 	if err != nil {
 		t.Fatalf("Error removing all readings")
@@ -263,7 +264,7 @@ func testDBReadings(t *testing.T, db DBClient) {
 	}
 }
 
-func testDBEvents(t *testing.T, db DBClient) {
+func testDBEvents(t *testing.T, db clients.DBClient) {
 	err := db.ScrubAllEvents()
 	if err != nil {
 		t.Fatalf("Error removing all events")
@@ -466,7 +467,7 @@ func testDBEvents(t *testing.T, db DBClient) {
 	}
 }
 
-func testDBValueDescriptors(t *testing.T, db DBClient) {
+func testDBValueDescriptors(t *testing.T, db clients.DBClient) {
 	err := db.ScrubAllValueDescriptors()
 	if err != nil {
 		t.Fatalf("Error removing all value descriptors")
@@ -617,7 +618,7 @@ func testDBValueDescriptors(t *testing.T, db DBClient) {
 	}
 }
 
-func testDB(t *testing.T, db DBClient) {
+func TestDataDB(t *testing.T, db clients.DBClient) {
 	testDBReadings(t, db)
 	testDBEvents(t, db)
 	testDBValueDescriptors(t, db)
@@ -626,9 +627,4 @@ func testDB(t *testing.T, db DBClient) {
 	// Calling CloseSession twice to test that there is no panic when closing an
 	// already closed db
 	db.CloseSession()
-}
-
-func TestMemoryDB(t *testing.T) {
-	memory := &memDB{}
-	testDB(t, memory)
 }

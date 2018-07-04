@@ -185,7 +185,9 @@ func restDeleteCommandById(w http.ResponseWriter, r *http.Request) {
 
 	if err := dbClient.DeleteCommandById(id); err != nil {
 		loggingClient.Error(err.Error(), "")
-		if err == db.ErrCommandStillInUse {
+		if err == db.ErrNotFound {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		} else if err == db.ErrCommandStillInUse {
 			http.Error(w, err.Error(), http.StatusConflict)
 		} else {
 			http.Error(w, err.Error(), http.StatusServiceUnavailable)

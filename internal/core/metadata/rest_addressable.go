@@ -128,7 +128,11 @@ func restUpdateAddressable(w http.ResponseWriter, r *http.Request) {
 
 	if err := dbClient.UpdateAddressable(&ra, &res); err != nil {
 		loggingClient.Error(err.Error(), "")
-		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		if err == db.ErrNotFound {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		} else {
+			http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		}
 		return
 	}
 
@@ -184,6 +188,11 @@ func restDeleteAddressableById(w http.ResponseWriter, r *http.Request) {
 
 	err = dbClient.DeleteAddressableById(a.Id.Hex())
 	if err != nil {
+		if err == db.ErrNotFound {
+			loggingClient.Error(err.Error(), "")
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
 		loggingClient.Error(err.Error(), "")
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
@@ -229,7 +238,11 @@ func restDeleteAddressableByName(w http.ResponseWriter, r *http.Request) {
 
 	if err := dbClient.DeleteAddressableById(a.Id.Hex()); err != nil {
 		loggingClient.Error(err.Error(), "")
-		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		if err == db.ErrNotFound {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		} else {
+			http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		}
 		return
 	}
 
@@ -300,7 +313,11 @@ func restGetAddressableByTopic(w http.ResponseWriter, r *http.Request) {
 	err = dbClient.GetAddressablesByTopic(&res, t)
 	if err != nil {
 		loggingClient.Error(err.Error(), "")
-		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		if err == db.ErrNotFound {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		} else {
+			http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		}
 		return
 	}
 

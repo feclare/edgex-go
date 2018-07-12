@@ -391,6 +391,7 @@ func (m *MemDB) GetAllDevices(d *[]models.Device) error {
 	cpy := make([]models.Device, len(m.devices))
 	copy(cpy, m.devices)
 	*d = cpy
+	// FCR
 	return nil
 }
 
@@ -486,6 +487,7 @@ func (m *MemDB) AddDeviceProfile(d *models.DeviceProfile) error {
 			return db.ErrNotUnique
 		}
 	}
+	// FCR add commands
 
 	m.deviceProfiles = append(m.deviceProfiles, *d)
 	return nil
@@ -501,6 +503,7 @@ func (m *MemDB) GetAllDeviceProfiles(d *[]models.DeviceProfile) error {
 func (m *MemDB) GetDeviceProfileById(d *models.DeviceProfile, id string) error {
 	for _, dp := range m.deviceProfiles {
 		if dp.Id.Hex() == id {
+			// FCR update device profile commands
 			*d = dp
 			return nil
 		}

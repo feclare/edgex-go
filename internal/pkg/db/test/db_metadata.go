@@ -16,6 +16,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+var (
+	invalidId    = bson.NewObjectId()
+	invalidIdStr = invalidId.Hex()
+)
+
 func TestMetadataDB(t *testing.T, dbClient interfaces.DBClient) {
 
 	testDBAddressables(t, dbClient)
@@ -424,7 +429,7 @@ func testDBAddressables(t *testing.T, dbClient interfaces.DBClient) {
 	if a.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", a.Id, id)
 	}
-	err = dbClient.GetAddressableById(&a, "INVALID")
+	err = dbClient.GetAddressableById(&a, invalidIdStr)
 	if err == nil {
 		t.Fatalf("Addressable should not be found")
 	}
@@ -541,7 +546,7 @@ func testDBAddressables(t *testing.T, dbClient interfaces.DBClient) {
 	// 	t.Fatalf("Error updating Addressable %v", err)
 	// }
 
-	a.Id = "INVALID"
+	a.Id = invalidId
 	a.Name = "INVALID"
 	err = dbClient.DeleteAddressableById(a.Id.Hex())
 	if err == nil {
@@ -592,7 +597,7 @@ func testDBCommand(t *testing.T, dbClient interfaces.DBClient) {
 	if c.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", c.Id, id)
 	}
-	err = dbClient.GetCommandById(&c, "INVALID")
+	err = dbClient.GetCommandById(&c, invalidIdStr)
 	if err == nil {
 		t.Fatalf("Command should not be found")
 	}
@@ -626,13 +631,13 @@ func testDBCommand(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating Command %v", err)
 	}
 
-	c.Id = "INVALID"
+	c.Id = invalidId
 	err = dbClient.UpdateCommand(&cc, &c)
 	if err == nil {
 		t.Fatalf("Should return error")
 	}
 
-	err = dbClient.DeleteCommandById("INVALID")
+	err = dbClient.DeleteCommandById(invalidIdStr)
 	if err == nil {
 		t.Fatalf("Command should not be deleted")
 	}
@@ -674,7 +679,7 @@ func testDBDeviceService(t *testing.T, dbClient interfaces.DBClient) {
 	if ds.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", ds.Id, id)
 	}
-	err = dbClient.GetDeviceServiceById(&ds, "INVALID")
+	err = dbClient.GetDeviceServiceById(&ds, invalidIdStr)
 	if err == nil {
 		t.Fatalf("DeviceService should not be found")
 	}
@@ -732,7 +737,7 @@ func testDBDeviceService(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating DeviceService %v", err)
 	}
 
-	ds.Id = "INVALID"
+	ds.Id = invalidId
 	err = dbClient.UpdateDeviceService(ds)
 	if err == nil {
 		t.Fatalf("Should return error")
@@ -783,7 +788,7 @@ func testDBSchedule(t *testing.T, dbClient interfaces.DBClient) {
 	if e.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", e.Id, id)
 	}
-	err = dbClient.GetScheduleById(&e, "INVALID")
+	err = dbClient.GetScheduleById(&e, invalidIdStr)
 	if err == nil {
 		t.Fatalf("Schedule should not be found")
 	}
@@ -814,7 +819,7 @@ func testDBSchedule(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating Schedule %v", err)
 	}
 
-	e2.Id = "INVALID"
+	e2.Id = invalidId
 	err = dbClient.UpdateSchedule(e2)
 	if err == nil {
 		t.Fatalf("Should return error")
@@ -864,7 +869,7 @@ func testDBDeviceReport(t *testing.T, dbClient interfaces.DBClient) {
 	if e.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", e.Id, id)
 	}
-	err = dbClient.GetDeviceReportById(&e, "INVALID")
+	err = dbClient.GetDeviceReportById(&e, invalidIdStr)
 	if err == nil {
 		t.Fatalf("DeviceReport should not be found")
 	}
@@ -927,7 +932,7 @@ func testDBDeviceReport(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating DeviceReport %v", err)
 	}
 
-	e2.Id = "INVALID"
+	e2.Id = invalidId
 	err = dbClient.UpdateDeviceReport(&e2)
 	if err == nil {
 		t.Fatalf("Should return error")
@@ -983,7 +988,7 @@ func testDBScheduleEvent(t *testing.T, dbClient interfaces.DBClient) {
 	if e.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", e.Id, id)
 	}
-	err = dbClient.GetScheduleEventById(&e, "INVALID")
+	err = dbClient.GetScheduleEventById(&e, invalidIdStr)
 	if err == nil {
 		t.Fatalf("ScheduleEvent should not be found")
 	}
@@ -1061,7 +1066,7 @@ func testDBScheduleEvent(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating ScheduleEvent %v", err)
 	}
 
-	e.Id = "INVALID"
+	e.Id = invalidId
 	err = dbClient.UpdateScheduleEvent(e)
 	if err == nil {
 		t.Fatalf("Should return error")
@@ -1111,7 +1116,7 @@ func testDBDeviceProfile(t *testing.T, dbClient interfaces.DBClient) {
 	if dp.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", dp.Id, id)
 	}
-	err = dbClient.GetDeviceProfileById(&dp, "INVALID")
+	err = dbClient.GetDeviceProfileById(&dp, invalidIdStr)
 	if err == nil {
 		t.Fatalf("DeviceProfile should not be found")
 	}
@@ -1226,7 +1231,7 @@ func testDBDeviceProfile(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating DeviceProfile %v", err)
 	}
 
-	d2.Id = "INVALID"
+	d2.Id = invalidId
 	err = dbClient.UpdateDeviceProfile(&d2)
 	if err == nil {
 		t.Fatalf("Should return error")
@@ -1280,7 +1285,7 @@ func testDBDevice(t *testing.T, dbClient interfaces.DBClient) {
 	if d.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", d.Id, id)
 	}
-	err = dbClient.GetDeviceById(&d, "INVALID")
+	err = dbClient.GetDeviceById(&d, invalidIdStr)
 	if err == nil {
 		t.Fatalf("Device should not be found")
 	}
@@ -1374,7 +1379,7 @@ func testDBDevice(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating Device %v", err)
 	}
 
-	d.Id = "INVALID"
+	d.Id = invalidId
 	err = dbClient.UpdateDevice(d)
 	if err == nil {
 		t.Fatalf("Should return error")
@@ -1425,7 +1430,7 @@ func testDBProvisionWatcher(t *testing.T, dbClient interfaces.DBClient) {
 	if pw.Id.Hex() != id.Hex() {
 		t.Fatalf("Id does not match %s - %s", pw.Id, id)
 	}
-	err = dbClient.GetProvisionWatcherById(&pw, "INVALID")
+	err = dbClient.GetProvisionWatcherById(&pw, invalidIdStr)
 	if err == nil {
 		t.Fatalf("ProvisionWatcher should not be found")
 	}
@@ -1502,7 +1507,7 @@ func testDBProvisionWatcher(t *testing.T, dbClient interfaces.DBClient) {
 		t.Fatalf("Error updating ProvisionWatcher %v", err)
 	}
 
-	pw.Id = "INVALID"
+	pw.Id = invalidId
 	err = dbClient.UpdateProvisionWatcher(pw)
 	if err == nil {
 		t.Fatalf("Should return error")

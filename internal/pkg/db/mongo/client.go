@@ -83,7 +83,7 @@ func (mc *MongoClient) getSessionCopy() *mgo.Session {
 
 func errorMap(err error) error {
 	if err == mgo.ErrNotFound {
-		err = db.ErrNotFound
+		return db.ErrNotFound
 	}
 	return err
 }

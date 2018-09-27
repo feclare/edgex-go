@@ -15,7 +15,6 @@ import (
 
 	"github.com/edgexfoundry/edgex-go/internal"
 	"github.com/edgexfoundry/edgex-go/internal/export"
-	"github.com/edgexfoundry/edgex-go/pkg/models"
 	"github.com/go-zoo/bone"
 )
 
@@ -39,7 +38,7 @@ func replyNotifyRegistrations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	update := models.NotifyUpdate{}
+	update := export.NotifyUpdate{}
 	if err := json.Unmarshal(data, &update); err != nil {
 		LoggingClient.Error(fmt.Sprintf("Failed to parse %X", data))
 		w.WriteHeader(http.StatusBadRequest)

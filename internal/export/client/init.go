@@ -8,9 +8,10 @@ package client
 
 import (
 	"fmt"
-	"github.com/edgexfoundry/edgex-go/internal/pkg/startup"
 	"sync"
 	"time"
+
+	"github.com/edgexfoundry/edgex-go/internal/pkg/startup"
 
 	"github.com/edgexfoundry/edgex-go/internal"
 	"github.com/edgexfoundry/edgex-go/internal/export"
@@ -20,7 +21,6 @@ import (
 	"github.com/edgexfoundry/edgex-go/internal/pkg/db/memory"
 	"github.com/edgexfoundry/edgex-go/internal/pkg/db/mongo"
 	"github.com/edgexfoundry/edgex-go/pkg/clients"
-	"github.com/edgexfoundry/edgex-go/pkg/clients/export/distro"
 	"github.com/edgexfoundry/edgex-go/pkg/clients/logging"
 	"github.com/edgexfoundry/edgex-go/pkg/clients/types"
 	"github.com/pkg/errors"
@@ -35,7 +35,7 @@ var chConfig chan interface{} //A channel for use by ConsulDecoder in detecting 
 var dbClient export.DBClient
 var LoggingClient logger.LoggingClient
 var Configuration *ConfigurationStruct
-var dc distro.DistroClient
+var dc distroClient
 
 func Retry(useConsul bool, useProfile string, timeout int, wait *sync.WaitGroup, ch chan error) {
 	until := time.Now().Add(time.Millisecond * time.Duration(timeout))
@@ -166,7 +166,7 @@ func initializeClients(useConsul bool) {
 		Interval:    Configuration.Service.ClientMonitor,
 	}
 
-	dc = distro.NewDistroClient(params, startup.Endpoint{})
+	dc = newDistroClient(params, startup.Endpoint{})
 }
 
 func connectToConsul(conf *ConfigurationStruct) error {

@@ -55,6 +55,11 @@ const (
 	NotifyUpdateDelete = "delete"
 )
 
+type NotifyUpdate struct {
+	Name      string `json:"name"`
+	Operation string `json:"operation"`
+}
+
 // Registration - Defines the registration details
 // on the part of north side export clients
 type Registration struct {

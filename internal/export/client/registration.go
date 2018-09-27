@@ -11,12 +11,12 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/edgexfoundry/edgex-go/internal/export"
-	"github.com/edgexfoundry/edgex-go/internal/pkg/db"
-	"github.com/edgexfoundry/edgex-go/pkg/models"
-	"github.com/go-zoo/bone"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/edgexfoundry/edgex-go/internal/export"
+	"github.com/edgexfoundry/edgex-go/internal/pkg/db"
+	"github.com/go-zoo/bone"
 )
 
 const (
@@ -149,7 +149,7 @@ func addReg(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	notifyUpdatedRegistrations(models.NotifyUpdate{Name: reg.Name,
+	notifyUpdatedRegistrations(export.NotifyUpdate{Name: reg.Name,
 		Operation: "add"})
 
 	w.WriteHeader(http.StatusOK)
@@ -238,7 +238,7 @@ func updateReg(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	notifyUpdatedRegistrations(models.NotifyUpdate{Name: toReg.Name,
+	notifyUpdatedRegistrations(export.NotifyUpdate{Name: toReg.Name,
 		Operation: "update"})
 
 	w.Header().Set("Content-Type", applicationJson)
@@ -265,7 +265,7 @@ func delRegByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	notifyUpdatedRegistrations(models.NotifyUpdate{Name: reg.Name,
+	notifyUpdatedRegistrations(export.NotifyUpdate{Name: reg.Name,
 		Operation: "delete"})
 
 	w.Header().Set("Content-Type", applicationJson)
@@ -283,7 +283,7 @@ func delRegByName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	notifyUpdatedRegistrations(models.NotifyUpdate{Name: name,
+	notifyUpdatedRegistrations(export.NotifyUpdate{Name: name,
 		Operation: "delete"})
 
 	w.Header().Set("Content-Type", applicationJson)
@@ -291,7 +291,7 @@ func delRegByName(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("true"))
 }
 
-func notifyUpdatedRegistrations(update models.NotifyUpdate) {
+func notifyUpdatedRegistrations(update export.NotifyUpdate) {
 	go func() {
 		err := dc.NotifyRegistrations(update)
 		if err != nil {

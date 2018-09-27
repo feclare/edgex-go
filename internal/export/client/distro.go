@@ -11,36 +11,33 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *******************************************************************************/
-package distro
+package client
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/edgexfoundry/edgex-go/pkg/clients"
-	"github.com/edgexfoundry/edgex-go/pkg/clients/types"
-	"github.com/edgexfoundry/edgex-go/pkg/models"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/edgexfoundry/edgex-go/internal/export"
+	"github.com/edgexfoundry/edgex-go/pkg/clients"
+	"github.com/edgexfoundry/edgex-go/pkg/clients/types"
+	"github.com/pkg/errors"
 )
 
-type DistroClient interface {
-	NotifyRegistrations(models.NotifyUpdate) error
-}
-
-type distroRestClient struct {
+type distroClient struct {
 	url      string
 	endpoint clients.Endpointer
 }
 
-func NewDistroClient(params types.EndpointParams, m clients.Endpointer) DistroClient {
-	d := distroRestClient{endpoint: m}
+func newDistroClient(params types.EndpointParams, m clients.Endpointer) distroClient {
+	d := distroClient{endpoint: m}
 	d.init(params)
 	return &d
 }
 
-func (d *distroRestClient) init(params types.EndpointParams) {
+func (d *distroClient) init(params types.EndpointParams) {
 	if params.UseRegistry {
 		ch := make(chan string, 1)
 		go d.endpoint.Monitor(params, ch)
@@ -57,7 +54,7 @@ func (d *distroRestClient) init(params types.EndpointParams) {
 	}
 }
 
-func (d *distroRestClient) NotifyRegistrations(update models.NotifyUpdate) error {
+func (d *distroClient) NotifyRegistrations(update export.NotifyUpdate) error {
 	client := &http.Client{}
 	url := d.url + clients.ApiNotifyRegistrationRoute
 

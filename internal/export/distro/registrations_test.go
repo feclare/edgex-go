@@ -173,18 +173,18 @@ func TestRegistrationInfoLoop(t *testing.T) {
 func TestUpdateRunningRegistrations(t *testing.T) {
 	running := make(map[string]*registrationInfo)
 
-	if updateRunningRegistrations(running, models.NotifyUpdate{}) == nil {
+	if updateRunningRegistrations(running, export.NotifyUpdate{}) == nil {
 		t.Error("Err should not be nil")
 	}
-	if updateRunningRegistrations(running, models.NotifyUpdate{
+	if updateRunningRegistrations(running, export.NotifyUpdate{
 		Operation: export.NotifyUpdateDelete}) == nil {
 		t.Error("Err should not be nil")
 	}
-	if updateRunningRegistrations(running, models.NotifyUpdate{
+	if updateRunningRegistrations(running, export.NotifyUpdate{
 		Operation: export.NotifyUpdateUpdate}) == nil {
 		t.Error("Err should not be nil")
 	}
-	if updateRunningRegistrations(running, models.NotifyUpdate{
+	if updateRunningRegistrations(running, export.NotifyUpdate{
 		Operation: export.NotifyUpdateAdd}) == nil {
 		t.Error("Err should not be nil")
 	}
